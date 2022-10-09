@@ -20,7 +20,7 @@ app.use(
 );
 
 // view engine setup
-app.set("views", __dirname + 'views');
+app.set("views", __dirname + '/views');
 app.set("view engine", "pug");
 
 app.use(logger("dev"));
