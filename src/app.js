@@ -2,6 +2,7 @@ const createError = require("http-errors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const hbs = require('hbs');
 const indexRouter = require("./routes/index.routes");
 const usersRouter = require("./routes/users.routes");
 const rootRouter = require("./routes/root.routes");
@@ -20,14 +21,16 @@ app.use(
 );
 
 // view engine setup
-app.set("views", __dirname + '/views');
-app.set("view engine", "pug");
+app.set("view engine", "html");
+app.engine("html", require("hbs").__express);
+app.set("views", __dirname + '/views/html');
+
 
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(express.static("public") ); /**** */
+app.use(express.static(__dirname + "/views") ); /**** */
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter); 

@@ -23,6 +23,7 @@ router.get('/', function(req, res, next) {
     res.render('index', { title: 'Libreria', message : 'Incorrect Email or Password.', flag : 1 });
   }
   else{
+    console.log('Entre primera vez')
     res.render('index', { title: 'Libreria' });
   }
    
@@ -31,17 +32,17 @@ router.get('/', function(req, res, next) {
 //Handle POST request for User Registration
 router.post('/auth_reg', function(req, res, next){
 
-  var cedula = req.body.cedula;
-  var nombre = req.body.nombre;
-  var fecha_nacimiento = req.body.fecha_nacimiento;
-  var lugar_nacimiento = req.body.lugar_nacimiento;
-  var direccion = req.body.direccion;
-  var genero = req.body.genero;
-  var correo = req.body.correo;
-  var temasPreferencia = req.body.temasPreferencia;
-  var role = 'cliente'
-  var password = req.body.contrasena;
-  var cpassword = req.body.ccontrasena;
+  const cedula = req.body.cedula;
+  const nombre = req.body.nombre;
+  const fecha_nacimiento = req.body.fecha_nacimiento;
+  const lugar_nacimiento = req.body.lugar_nacimiento;
+  const direccion = req.body.direccion;
+  const genero = req.body.genero;
+  const correo = req.body.correo;
+  const temasPreferencia = req.body.temasPreferencia;
+  const role = 'cliente'
+  const password = req.body.contrasena;
+  const cpassword = req.body.ccontrasena;
 
   if(cpassword == password){
 
@@ -140,6 +141,14 @@ router.get('/logout', function(req, res, next){
     req.session.destroy();
     res.redirect('/');
   }
+})
+
+router.get('/login', function(req, res, next){
+  res.render('login', { title: 'Libreria' });
+})
+
+router.get('/register', function(req, res, next){
+  res.render('register', { title: 'Libreria' });
 })
 
 module.exports = router;
