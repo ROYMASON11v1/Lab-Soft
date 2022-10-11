@@ -14,7 +14,7 @@ const app = express();
 app.use(
   session({
     secret: "ABCDefg",
-    resave: false,
+    resave: true,
     saveUninitialized: true,
   })
 );
@@ -25,12 +25,12 @@ app.set("view engine", "pug");
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static("public") ); /**** */
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/users", usersRouter); 
 app.use("/root", rootRouter);
 //app.use('/administradores', administradorRouter);
 
