@@ -26,23 +26,25 @@ router.get('/', function(req, res, next) {
     console.log('Entre primera vez')
     res.render('index', { title: 'Libreria' });
   }
-   
 });
 
-//Handle POST request for User Registration
+//Handle POST request for User Registration FIXME:
 router.post('/auth_reg', function(req, res, next){
 
-  const cedula = req.body.cedula;
-  const nombre = req.body.nombre;
-  const fecha_nacimiento = req.body.fecha_nacimiento;
-  const lugar_nacimiento = req.body.lugar_nacimiento;
-  const direccion = req.body.direccion;
-  const genero = req.body.genero;
-  const correo = req.body.correo;
-  const temasPreferencia = req.body.temasPreferencia;
+  const cedula = req.body.Cedula;
+  const nombre = req.body.Nombre;
+  const fecha_nacimiento = req.body.fechaNacimiento;
+  const lugar_nacimiento = req.body.lugarNacimiento;
+  const genero = req.body.Genero;
+  const correo = req.body.Correo;
+  const usuario = req.body.Usuario;
+  const temasPreferencia = "Terror tributario"; //FIXME:
   const role = 'cliente'
-  const password = req.body.contrasena;
-  const cpassword = req.body.ccontrasena;
+  const password = req.body.Contrasena;
+  const cpassword = req.body.ValidacionContrasena;
+  const departamento = req.body.Departamento;
+  const ciudad = req.body.Ciudad;
+  const direccion = `${req.body.Direccion}, ${ciudad}, ${departamento}`;
 
   if(cpassword == password){
 
@@ -73,7 +75,7 @@ router.post('/auth_reg', function(req, res, next){
 });
 
 
-//Handle POST request for User Login
+//Handle POST request for User Login FIXME:
 router.post('/auth_login', function(req,res,next){
 
   var correo1 = req.body.correo;
@@ -85,7 +87,7 @@ router.post('/auth_login', function(req,res,next){
     if(result.length && bcrypt.compareSync(password, result[0].contrasena)){
       req.session.role = result[0].role;
       req.session.usuario = result[0].nombre;
-      res.redirect('/libreria');
+      res.redirect('/libreria'); //FIXME:
     }else{
       req.session.flag = 4;
       res.redirect('/');
@@ -118,11 +120,16 @@ router.post('/auth_rootlogin', function(req,res,next){
 //Route For Home Page
 router.get('/libreria', function(req, res, next){
   if(req.session.role == 'cliente'){
-    var permissions = 1
+    const permisos ={
+      "permisos": ["cliente", "cliente_prueba"]
+    }
   }else if(req.session.role == 'admin'){
     var permissions = 2
 
   }else if(req.session.role == 'root'){
+    const permisos ={
+      "permisos" : ["Registrar Admin", "prueba"]
+    };
     //const role_data = [{role: req.session.role}]
     //const node = document.createElement("p")
     //const prueba = document.createTextNode("water")
@@ -133,7 +140,7 @@ router.get('/libreria', function(req, res, next){
   }
   // res.send(`hola amiguitos ${req.session.role}`)
   // res.render('libreria', () => ({}))
-  res.render('libreria', {message : 'Bienvenido ' + req.session.usuario + ", " + req.session.role, role:'' + req.session.role });
+  res.render('libreria', {message : 'Bienvenido ' + req.session.usuario + ", " + req.session.role, role:'' + req.session.role, permisos });
 });
 
 router.get('/logout', function(req, res, next){
