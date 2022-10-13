@@ -33,8 +33,8 @@ router.post('/auth_reg', function(req, res, next){
 
   const cedula = req.body.Cedula;
   const nombre = req.body.Nombre;
-  const fecha_nacimiento = req.body.fechaNacimiento;
-  const lugar_nacimiento = req.body.lugarNacimiento;
+  const fecha_nacimiento = req.body.FechaNacimiento;
+  const lugar_nacimiento = req.body.LugarNacimiento;
   const genero = req.body.Genero;
   const correo = req.body.Correo;
   const usuario = req.body.Usuario;
@@ -48,7 +48,7 @@ router.post('/auth_reg', function(req, res, next){
 
   if(cpassword == password){
 
-    var sql = 'select * from cliente where correo = ?;';
+    var sql = 'select * from cliente where usuario = ?;';
 
     con.query(sql,[correo], function(err, result, fields){
       if(err) throw err;
@@ -59,7 +59,7 @@ router.post('/auth_reg', function(req, res, next){
       }else{
 
         var hashpassword = bcrypt.hashSync(password, 10);
-        var sql = 'insert into cliente(cedula,nombre,fecha_nacimiento,lugar_nacimiento,direccion,genero,correo,temasPreferencia,role,contrasena) values(?,?,?,?,?,?,?,?,?,?);';
+        var sql = 'insert into cliente(cedula,nombre,fecha_nacimiento,lugar_nacimiento,direccion,genero,usuario,temasPreferencia,role,contrasena) values(?,?,?,?,?,?,?,?,?,?);';
 
         con.query(sql,[cedula,nombre,fecha_nacimiento,lugar_nacimiento,direccion,genero,correo,temasPreferencia,role,hashpassword], function(err, result, fields){
           if(err) throw err;
@@ -75,72 +75,96 @@ router.post('/auth_reg', function(req, res, next){
 });
 
 
-//Handle POST request for User Login FIXME:
+//Handle POST request for User Login
 router.post('/auth_login', function(req,res,next){
-
-  var correo1 = req.body.correo;
+  var usuario = req.body.correo;
   var password =req.body.contrasena;
-  var sql = 'select * from cliente where correo = ?;';
-  con.query(sql,[correo1], function(err,result, fields){
-    if(err) throw err;
-
-    if(result.length && bcrypt.compareSync(password, result[0].contrasena)){
-      req.session.role = result[0].role;
-      req.session.usuario = result[0].nombre;
-      res.redirect('/libreria'); //FIXME:
-    }else{
-      req.session.flag = 4;
-      res.redirect('/');
-    }
-  });
-});
-
-router.post('/auth_rootlogin', function(req,res,next){
-
-  var usuario = req.body.usuario;
-  var password =req.body.contrasena;
-  console.log(usuario);
-  console.log(password);
-  var sql = 'select * from Root where usuario = ?;';
+  var sql = 'select * from cliente where usuario = ?';
   con.query(sql,[usuario], function(err,result, fields){
     if(err) throw err;
 
     if(result.length && bcrypt.compareSync(password, result[0].contrasena)){
+      console.log("exist client");
       req.session.role = result[0].role;
       req.session.usuario = result[0].usuario;
-      res.redirect('/libreria');
+      res.redirect('/userhome');
     }else{
-      req.session.flag = 4;
-      res.redirect('/');
+      var sql = 'select * from Root where usuario = ?';
+      con.query(sql,[usuario], function(err, result, fields){
+        if(err) throw err;
+        if(result.length && bcrypt.compareSync(password, result[0].contrasena)){
+          console.log("exist root");
+          req.session.role = result[0].role;
+          req.session.usuario = result[0].usuario;
+          console.log(req.session.role, req.session.usuario);
+          res.redirect('/userhome');
+        }else{
+          var sql = 'select * from Administrador where usuario = ?';
+          con.query(sql,[usuario], function(err, result, fields){
+            if(err) throw err;
+            if(result.length && bcrypt.compareSync(password, result[0].contrasena)){
+              console.log("Exist admin");
+              req.session.role = result[0].role;
+              req.session.usuario = result[0].usuario;
+              console.log(req.session.role, req.session.usuario);
+              res.redirect('/userhome');
+             }else{
+              console.log("no exist");
+              req.session.flag = 4;
+              res.redirect('/')  
+             }
+        });
+      }      
+      });
     }
   });
 });
 
-
-//Route For Home Page
-router.get('/libreria', function(req, res, next){
-  if(req.session.role == 'cliente'){
-    const permisos ={
-      "permisos": ["cliente", "cliente_prueba"]
+router.get('/userhome', function(req, res, next){
+  if (req.session.usuario)
+    {if(req.session.role == 'cliente'){
+      const permissions = {
+        "Nombre" : ["Editar Perfil", "Prubea1"]
+      };
+      res.render('userhome', {message : 'Bienvenido ' + req.session.usuario, role:'' + req.session.role, permission: [
+        {id: "Editar Perfil",
+        prueba: "Prubea"
+      },
+        {id: "Tarjetas",
+          prueba: "Prubea2"
+        },
+        {id: "Historial",
+          prueba: "Prubea2"
+        },
+        {id: "Reservas",
+          prueba: "Prubea2"
+        },
+        {id: "Compras",
+          prueba: "Prubea2"
+        },
+        {id: "Foro",
+          prueba: "Prubea2"
+        }
+        
+    ]   
+  });
     }
-  }else if(req.session.role == 'admin'){
-    var permissions = 2
-
-  }else if(req.session.role == 'root'){
-    const permisos ={
-      "permisos" : ["Registrar Admin", "prueba"]
-    };
-    //const role_data = [{role: req.session.role}]
-    //const node = document.createElement("p")
-    //const prueba = document.createTextNode("water")
-    //node.appendChild(prueba);
-    //document.getElementById("pruebaPadre").appendChild(node)
-  }else{
-    var permissions = 4;
+    else if(req.session.role == 'root'){
+      const permission = {
+        "Nombre" : ["Registrar Perfil", "PrubeaRoot"]
+      };
+      res.render('userhome', {message : 'Bienvenido ' + req.session.usuario, role:'' + req.session.role });
+    }
+    else if(req.session.role == 'admin'){
+      const permission = {
+        "NOmbre" : ["Administradores", "PrubeaAdmin"]
+      };
+      res.render('userhome', {message : 'Bienvenido ' + req.session.usuario, role:'' + req.session.role });
+    }
   }
-  // res.send(`hola amiguitos ${req.session.role}`)
-  // res.render('libreria', () => ({}))
-  res.render('libreria', {message : 'Bienvenido ' + req.session.usuario + ", " + req.session.role, role:'' + req.session.role, permisos });
+  else{
+    res.redirect('/');
+  }
 });
 
 router.get('/logout', function(req, res, next){

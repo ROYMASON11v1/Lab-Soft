@@ -16,7 +16,7 @@
   }
 
   .nav1 {
-    background-color: #c19e67;
+    background-color: #2ec3ab;
   }
 
   .nav2 {
@@ -91,13 +91,18 @@
                   <img src="../img/usuario.png" width="20" alt=""> Usuario
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="/EditarPerfil">Mi perfil</a></li>
-                  <li><a class="dropdown-item" href="#">Tarjetas</a></li>
-                  <li><a class="dropdown-item" href="#">Historial</a></li>
+                  {{#each permission}}
+                    <li><a class="dropdown-item" href="/#/">{{this.id}}</a></li>
+                    {{else}}
+                    <li><a class="dropdown-item" href="/#/">Sin funciones</a></li>
+                 {{/each}}
                   <li>
                     <hr class="dropdown-divider">
                   </li>
-                  <li><a class="dropdown-item" href="#">Cerrar sesión</a></li>
+                  <li>
+                    <a class="dropdown-item" href="/logout">{{ role }}</a>
+                    <a class="dropdown-item" href="/logout">Cerrar sesión</a>
+                  </li>
                 </ul>
               </li>
               <li><a class="nav-link" href="#"><img src="../img/carrito.png" width="20" alt=""> Carrito</a></li>
@@ -113,7 +118,7 @@
       <div class="carousel-inner" role="listbox">
         <div class="carousel-item active">
           <!-- <img src="../img/pexels-janko-ferlic-590493.jpg" class="w-100 d-block img-fluid" alt="First slide"> -->
-          <img src="https://xboxplay.games/uploadStream/20705.jpg" class="w-100 d-block img-fluid" alt="First slide">
+          <img src="../img/pexels-janko-ferlic-590493.jpg" class="w-100 d-block img-fluid" alt="First slide">
         </div>
         <div class="carousel-item">
           <img src="../img/pexels-min-an-694740.jpg" class="w-100 d-block img-fluid" alt="Second slide">
