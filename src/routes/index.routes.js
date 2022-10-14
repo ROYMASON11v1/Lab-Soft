@@ -87,6 +87,7 @@ router.post('/auth_login', function(req,res,next){
       console.log("exist client");
       req.session.role = result[0].role;
       req.session.usuario = result[0].usuario;
+      console.log('root');
       res.redirect('/userhome');
     }else{
       var sql = 'select * from Root where usuario = ?';
@@ -97,6 +98,7 @@ router.post('/auth_login', function(req,res,next){
           req.session.role = result[0].role;
           req.session.usuario = result[0].usuario;
           console.log(req.session.role, req.session.usuario);
+          console.log('root');
           res.redirect('/userhome');
         }else{
           var sql = 'select * from Administrador where usuario = ?';
@@ -107,6 +109,7 @@ router.post('/auth_login', function(req,res,next){
               req.session.role = result[0].role;
               req.session.usuario = result[0].usuario;
               console.log(req.session.role, req.session.usuario);
+              console.log('admin');
               res.redirect('/userhome');
              }else{
               console.log("no exist");
