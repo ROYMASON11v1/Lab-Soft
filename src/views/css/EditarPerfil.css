@@ -5,6 +5,9 @@
 .boton{
     text-align: right;
 }
+h1{
+    font-family: monospace;
+}
 .accordion-body{
     background-color:beige;
 }
@@ -12,20 +15,32 @@
     align-items: center;
     width: 100%;
 }
+
+.datosContrasena,.datosEnvio,.formulario{
+    background-color: white;
+    /* border: 1px groove rgb(0, 0, 0);  */ 
+    border-radius: 5px;
+    border-top-left-radius: 0px;
+}
+.perfil,.envio,.contrasena{
+    background-color: white;
+    color: #6597f8;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    font-family: monospace;
+}
+body{
+    background-color: #eeeeee;
+    font-family: monospace;
+}
+
 .datosEnvio{
     display: none;
-    border: 1px solid rgb(0, 0, 0);
-
 }
 .datosContrasena{
     display: none;
-    border: 1px solid rgb(0, 0, 0);
+}
 
-}
-.formulario{
-    border: 1px solid rgb(0, 0, 0);
-    border-radius: 5px;
-}
 .error{
     color: red;
     font-size: small;
@@ -37,12 +52,9 @@
 a { text-decoration: none; 
     color: white;}
 
-h1 {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  }
 
   .nav1 {
-    background-color: #c19e67;
+    background-color: #e64a3f;
   }
 
   .nav2 {

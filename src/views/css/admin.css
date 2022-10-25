@@ -1,0 +1,49 @@
+/*parte del header*/
+body{
+    font-family: monospace;
+  }
+ 
+  .nav1 {
+    background-color: #e64a3f;
+  }
+
+  .nav2 {
+    background-color: #e9d4b3;
+  }
+
+  footer {
+    background-color: #c19e67;
+  }
+  header {
+	background: #333;
+	color: white;
+	height: 80px;
+	width: 100%; /* hacemos que la cabecera ocupe el ancho completo de la página */
+	left: 0; /* Posicionamos la cabecera al lado izquierdo */
+	top: 0; /* Posicionamos la cabecera pegada arriba */
+  z-index: 100;
+	position: fixed; /* Hacemos que la cabecera tenga una posición fija */
+}
+.headerStatic{
+  height: 128px;
+}
+label{
+    font-size: medium;
+}
+.agregarlibro{
+    border-radius: 5px;
+}
+@media screen and (max-width: 1000px) {
+	header{
+    position: relative;
+    align-items: center;
+  }
+  .headerStatic{
+    width: auto;
+  }
+}
+  a{
+    text-decoration: none;
+    color: black;
+}
+  

@@ -1,0 +1,115 @@
+/*parte del header*/
+body{
+    font-family: monospace;
+  }
+ 
+  .nav1 {
+    background-color: #e64a3f;
+  }
+
+  .nav2 {
+    background-color: #e9d4b3;
+  }
+
+  footer {
+    background-color: #c19e67;
+  }
+  header {
+	background: #333;
+	color: white;
+	height: 80px;
+	width: 100%; /* hacemos que la cabecera ocupe el ancho completo de la página */
+	left: 0; /* Posicionamos la cabecera al lado izquierdo */
+	top: 0; /* Posicionamos la cabecera pegada arriba */
+  z-index: 100;
+	position: fixed; /* Hacemos que la cabecera tenga una posición fija */
+}
+.headerStatic{
+  height: 128px;
+}
+@media screen and (max-width: 1000px) {
+	header{
+    position: relative;
+    align-items: center;
+  }
+  .headerStatic{
+    width: auto;
+  }
+}
+/* Propiedades del resto de la pagina */
+
+ /*  img {
+    width: 90%;
+    height: 90%;
+  } */
+
+  p {
+    font-size: medium;
+    height: 100%;
+  }
+
+  span {
+    font-size: small;
+  }
+
+  .boton {
+    width: 40%;
+  }
+  .price{
+    color: red;
+  }
+  .libro{
+    transition: 0.5s;
+    border-radius: 2px;
+    text-align: center;
+    border-radius: 10px;
+    height: 100%;
+  }
+  .libro:hover{
+    transform: scale(1.1);
+  }
+  .nav-link{
+    transition: 0.3s;
+  }
+  .nav-link:hover{
+    transform: scale(1.1);
+  }
+
+  .imglibros{
+    aspect-ratio: 5/8;
+    width: 90%;
+    height: 90%;
+  }
+  .botonescompra{
+    margin-bottom: 0;
+  }
+  /* body{
+    animation-duration: 3s;
+    animation-name: slidein;
+  }
+  
+  @keyframes slidein {
+    from {
+      margin-left: 100%;
+      width: 300%
+    }
+  
+    to {
+      margin-left: 0%;
+      width: 100%;
+    }
+  } */
+  a{
+    text-decoration: none;
+    color: black;
+  }
+  @media (max-width: 400px) {
+    .boton {
+      width: 80%;
+    }
+   }
+   @media (max-width: 1200px) {
+    .boton {
+      width: 30%;
+    }
+   }

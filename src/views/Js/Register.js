@@ -1,4 +1,32 @@
 $(function(){
+    jQuery.validator.addMethod("noSpace", function(value, element) { 
+        return value == '' || value.trim().length != 0;  
+      }, "No se aceptan espacios en blanco");
+      jQuery.validator.addMethod(
+        "validDOB",
+        function(value, element) {              
+            //var from = value.split(" "); // DD MM YYYY
+            var from = value.split("-"); // DD/MM/YYYY
+            var day = from[2];
+            var month = from[1];
+            var year = from[0];
+            var age = 18;
+            var mydate = new Date();
+            mydate.setFullYear(year, month-1, day);
+
+            var currdate = new Date();
+            var setDate = new Date();
+
+            setDate.setFullYear(mydate.getFullYear() + age, month-1, day);
+
+            if ((currdate - setDate) > 0){
+                return true;
+            }else{
+                return false;
+            }
+        },
+        "Debes tener mas de 18 años"
+    );
     var validacion = $("#formRegister").validate({
         rules:{
             Cedula:{
@@ -11,6 +39,7 @@ $(function(){
                 minlength:6
             },
             FechaNacimiento:{
+                validDOB:true,
                 required: true,
                 date: true
             },
@@ -31,7 +60,8 @@ $(function(){
             },
             Contrasena:{
                 required:true,
-                minlength:8
+                minlength:8,
+                noSpace: true
             },
             ValidacionContrasena:{
                 required:true,
@@ -40,6 +70,9 @@ $(function(){
             },
             Departamento:{
                 required: true
+            },
+            Pais:{
+                required:true
             },
             Ciudad:{
                 required:true
@@ -87,6 +120,9 @@ $(function(){
                 equalTo: "Ingrese la misma contraseña",
                 minlength: "La contraseña debe tener al menos 8 caracteres"
             },
+            Pais:{
+                required: "Seleccione un pais"
+            },
             Departamento:{
                 required: "Seleccione un departamento"
             },
@@ -105,8 +141,15 @@ $(function(){
             $(".DatosEnvio").show();
         }
     });
+    $( "#pais" ).change(function() {
+        if ($(this).val() == "Colombia"){
+            $(".dep-ciu").show();
+        }else{
+            $(".dep-ciu").hide();
+        }
+      });
     $("#Paso2").click(function () { 
-        if ( validacion.element("#department") && validacion.element("#direccion") ){
+        if (validacion.element("#pais") && validacion.element("#department") && validacion.element("#direccion") ){
             $(".DatosEnvio").hide();
             $(".TemasFavoritos").show();
         }

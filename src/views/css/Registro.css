@@ -2,13 +2,21 @@ body {
 	margin:  0;
 	font-family:fantasy;
 	background: linear-gradient(to right, #c19e67,#e9d4b3 );
-
+}
+label{
+	font-family:  monospace;
+}
+h3,h5,.botones,.btn{
+	font-family: monospace;
 }
 h5{
 	text-align: center;
 }
 .DatosEnvio{
 	display: none;
+}
+.dep-ciu{
+	display:none;
 }
 button{
 	align-items: center;

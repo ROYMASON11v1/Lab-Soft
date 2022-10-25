@@ -1,15 +1,31 @@
 $(function(){
+    $("#pais" ).change(function() {
+        if ($(this).val() == "Colombia"){
+            $(".dep-ciu").show();
+        }else{
+            $(".dep-ciu").hide();
+        }
+      });
     $("#EditarPerfil").click(function () {
+        $('.perfil').css('background', 'whitesmoke');
+        $('.envio').css('background', 'white');
+        $('.contrasena').css('background', 'white');
         $(".datosEnvio").hide();
         $(".datosContrasena").hide();
         $(".formulario").show();
     });
     $("#EditarEnvio").click(function () {
+        $('.perfil').css('background', 'white');
+        $('.envio').css('background', 'whitesmoke');
+        $('.contrasena').css('background', 'white');
         $(".formulario").hide();
         $(".datosContrasena").hide();
         $(".datosEnvio").show();
     });
     $("#EditarContrasena").click(function () {
+        $('.perfil').css('background', 'white');
+        $('.envio').css('background', 'white');
+        $('.contrasena').css('background', 'whitesmoke');
         $(".formulario").hide();
         $(".datosEnvio").hide();
         $(".datosContrasena").show();
@@ -77,5 +93,81 @@ $(function(){
         }
     });
     validacion.validate();
-    
 });
+$(function(){
+    var validacion2 = $("#validardireccion").validate({
+        rules:{
+            Departamento:{
+                required: true
+            },
+            Pais:{
+                required:true
+            },
+            Ciudad:{
+                required:true
+            },
+            Direccion:{
+                required:true,
+                minlength: 8
+            }
+        },
+        messages:{
+            Pais:{
+                required: "Seleccione un pais"
+            },
+            Departamento:{
+                required: "Seleccione un departamento"
+            },
+            Ciudad:{
+                required:"Seleccione una ciudad"
+            },
+            Direccion:{
+                required:"Ingrese una direccion",
+                minlength: "La dirección debe tener al menos 8 caracteres"
+            }
+        }
+    });
+    validacion2.validate();
+});
+$(function(){
+    jQuery.validator.addMethod("noSpace", function(value, element) { 
+        return value == '' || value.trim().length != 0;  
+      }, "No se aceptan espacios en blanco");
+    var validacion3 = $("#validarcontrasena").validate({
+        rules:{
+            Contrasena:{
+                required:true,
+                minlength:8,
+                noSpace: true
+            },
+            Contrasena1:{
+                required:true,
+                minlength:8,
+                noSpace: true
+            },
+            ValidacionContrasena:{
+                required:true,
+                equalTo:contrasena,
+                minlength: 8
+            }
+        },
+        messages:{
+            Contrasena:{
+                required:"Ingrese una contraseña",
+                minlength: "La contraseña debe tener al menos 8 caracteres"
+            },
+            Contrasena1:{
+                required:"Ingrese una contraseña",
+                minlength: "La contraseña debe tener al menos 8 caracteres"
+            },
+            ValidacionContrasena:{
+                required: "Ingrese la validación de la contrasena",
+                equalTo: "Ingrese la misma contraseña",
+                minlength: "La contraseña debe tener al menos 8 caracteres"
+            }
+        }
+    });
+    validacion3.validate();
+})
+
+
