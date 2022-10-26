@@ -147,7 +147,7 @@ $(function(){
             },
             ValidacionContrasena:{
                 required:true,
-                equalTo:contrasena,
+                equalTo:contrasena1,
                 minlength: 8
             }
         },

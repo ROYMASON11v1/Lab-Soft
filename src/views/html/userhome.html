@@ -92,7 +92,7 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                   {{#each permission}}
-                    <li><a class="dropdown-item" href="#">{{this.id}}</a></li>
+                    <li><a class="dropdown-item" href={{this.ref}}>{{this.id}}</a></li>
                     {{else}}
                     <li><a class="dropdown-item" href="#">Sin funciones</a></li>
                  {{/each}}

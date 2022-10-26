@@ -3,6 +3,7 @@ const router = express.Router();
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
 const con = require('../conn/conn');
+const { request } = require('../app');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -43,7 +44,7 @@ router.post('/auth_reg', function(req, res, next){
   const password = req.body.Contrasena;
   const cpassword = req.body.ValidacionContrasena;
   const departamento = req.body.Departamento;
-  const ciudad = req.body.Ciudad;
+  const ciudad = req.body.city;
   const direccion = `${req.body.Direccion}, ${ciudad}, ${departamento}`;
 
   if(cpassword == password){
@@ -87,6 +88,7 @@ router.post('/auth_login', function(req,res,next){
       console.log("exist client");
       req.session.role = result[0].role;
       req.session.usuario = result[0].usuario;
+      req.session.Cedula = result[0].cedula;
       console.log('root');
       res.redirect('/userhome');
     }else{
@@ -99,7 +101,7 @@ router.post('/auth_login', function(req,res,next){
           req.session.usuario = result[0].usuario;
           console.log(req.session.role, req.session.usuario);
           console.log('root');
-          res.redirect('/userhome');
+          res.redirect('/Root');
         }else{
           var sql = 'select * from Administrador where usuario = ?';
           con.query(sql,[usuario], function(err, result, fields){
@@ -123,6 +125,53 @@ router.post('/auth_login', function(req,res,next){
   });
 });
 
+router.get('/Root', function(req, res, next){
+  if (req.session.usuario != null){
+    if(req.session.role == 'root'){
+      res.render('Root', {message : 'Bienvenido ' + req.session.usuario, role:'' + req.session.role });
+    }
+  else{
+    console.log("no existes")
+    res.redirect('/');
+  }
+}else{
+  res.redirect('/')
+}
+});
+
+router.post('/auth_registarAdmin', function(req, res, next){
+
+  const usuario = req.body.usuario;
+  const nombre = req.body.nombre;
+  const password = req.body.contrasena;
+  const role = 'admin'
+  console.log("registrando admin")
+  if(req.session.role == 'root'){
+    var sql = 'select * from Administrador where usuario = ?;';
+    con.query(sql,[usuario], function(err, result, fields){
+      console.log("registrando admin si existe")
+      if(err) throw err;
+      if(result.length > 0){
+        //req.session.flag = 1;
+        console.log("YA EXISTE")
+        res.redirect('/root');
+      }else{
+        console.log("registrando admin si no existe", usuario);
+        var hashpassword = bcrypt.hashSync(password, 10);
+        var sql = 'insert into Administrador(usuario,nombre,contrasena,role) values(?,?,?,?);';
+
+        con.query(sql,[usuario,nombre,hashpassword,role], function(err, result, fields){
+          
+          if(err) throw err;
+          res.redirect('/Root');
+        });
+      }
+    });
+  }else{
+    res.redirect('/');
+  }
+});
+
 router.get('/userhome', function(req, res, next){
   if (req.session.usuario)
     {if(req.session.role == 'cliente'){
@@ -131,21 +180,27 @@ router.get('/userhome', function(req, res, next){
       };
       res.render('userhome', {message : 'Bienvenido ' + req.session.usuario, role:'' + req.session.role, permission: [
         {id: "Editar Perfil",
+        ref: 'EditarPerfil',
         prueba: "Prubea"
       },
         {id: "Tarjetas",
+        ref: "userhome",
           prueba: "Prubea2"
         },
         {id: "Historial",
+        ref: "userhome",
           prueba: "Prubea2"
         },
         {id: "Reservas",
+        ref: "userhome",
           prueba: "Prubea2"
         },
         {id: "Compras",
+        ref: "userhome",
           prueba: "Prubea2"
         },
         {id: "Foro",
+        ref: "userhome",
           prueba: "Prubea2"
         }
         
@@ -156,7 +211,7 @@ router.get('/userhome', function(req, res, next){
       const permission = {
         "Nombre" : ["Registrar Perfil", "PrubeaRoot"]
       };
-      res.render('userhome', {message : 'Bienvenido ' + req.session.usuario, role:'' + req.session.role });
+      res.render('Root', {message : 'Bienvenido ' + req.session.usuario, role:'' + req.session.role });
     }
     else if(req.session.role == 'admin'){
       const permission = {
@@ -169,6 +224,72 @@ router.get('/userhome', function(req, res, next){
     res.redirect('/');
   }
 });
+
+router.get('/EditarPerfil', function(req, res, next){
+  if(req.session.usuario){
+    var sql = 'select * from cliente where cedula = ?;';
+    con.query(sql,[req.session.Cedula], function(err, result, fields){
+      console.log(result[0].cedula, result[0].lugar_nacimiento, result[0].fecha_nacimiento, result[0].nombre)
+      const fecha = result[0].fecha_nacimiento
+      console.log("Editando Perfil", fecha)
+    res.render('EditarPerfil', {message :"hola", role: req.session.role, Cedula: result[0].cedula, Nombre: result[0].nombre, Fecha: result[0].fecha_nacimiento, Lugar: result[0].lugar_nacimiento, Genero: result[0].genero, Correo: result[0].usuario})
+    })
+    
+  }
+})
+
+router.post('/auth_perfil_base', function(req, res, next){
+  console.log("editar perfil aqui")
+  const cedula = req.body.Cedula;
+  const nombre = req.body.Nombre;
+  const fecha_nacimiento = req.body.FechaNacimiento;
+  const lugar_nacimiento = req.body.LugarNacimiento;
+  const genero = req.body.Genero;
+  const correo = req.body.Correo;
+  var sql = 'UPDATE cliente set cedula = ?, nombre = ?, fecha_nacimiento = ?, lugar_nacimiento = ?, genero = ?, usuario = ? where cedula = ?;';
+  con.query(sql,[cedula, nombre, fecha_nacimiento, lugar_nacimiento, genero, correo, req.session.Cedula], function(err, result, fields){
+    if(err) throw err;
+          req.session.flag = 2;
+          res.redirect('/EditarPerfil');
+  })
+})
+
+router.post('/auth_envio_base', function(req, res, next){
+  console.log("envio aqui")
+  const pais = req.body.Pais
+  const departamento = req.body.Departamento;
+  const ciudad = req.body.city;
+
+  const {uno, dos, tres, cuatro} = req.body;
+  const newedit = {
+    uno, dos, tres, cuatro
+  }
+  console.log(newedit)
+  //console.log(pais, departamento, ciudad)
+  const direccion = `${req.body.Direccion}, ${pais}, ${departamento}, ${ciudad}`;
+  var sql = 'UPDATE cliente set direccion = ? where cedula = ?;';
+  con.query(sql,[direccion, req.session.Cedula], function(err, result, fields){
+    if(err) throw err;
+          req.session.flag = 2;
+          res.redirect('/EditarPerfil');
+  })  
+})
+
+router.post('/auth_contrasena_base', function(req, res, next){
+  console.log("aquiiii")
+  const lastpassword = req.body.Contrasena
+  const password = req.body.Contrasena1;
+  var hashpassword = bcrypt.hashSync(password, 10);
+  var sql = 'UPDATE cliente set contrasena = ? where cedula = ?;';
+  con.query(sql,[hashpassword, req.session.Cedula], function(err, result, fields){
+    if(err) throw err;
+          req.session.flag = 2;
+          res.redirect('/EditarPerfil');
+  })
+})
+
+
+
 
 router.get('/logout', function(req, res, next){
   if(req.session.usuario){
