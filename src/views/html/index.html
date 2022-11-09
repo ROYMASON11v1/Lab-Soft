@@ -75,6 +75,29 @@
     </header>
   </div>
   <main class="p-2">
+    <p class="lead">
+    {{#if message1}}
+    <div class="alert alert-danger alert-dismissable">
+        <strong>{{message1}}</strong>mensaje de alerta.
+      </div>
+    {{else}} 
+        {{#if message2}}
+    <div class="alert alert-success alert-dismissable">
+        <strong>{{message2}}</strong>mensaje de alerta.
+      </div>
+
+    {{else}}
+      {{#if message3}}
+      <div class="alert alert-danger alert-dismissable">
+        <strong>{{message3}}</strong>mensaje de alerta.
+      </div>
+    
+    {{else}}
+     Hola, registrate o inicia sesion
+    {{/if}}
+        {{/if}}
+          {{/if}}
+      </p>
     <div id="carouselId" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner" role="listbox">
         <div class="carousel-item active">

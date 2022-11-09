@@ -109,6 +109,23 @@
         </header>
     </div>
     <main class="p-3">
+        
+        <p class="lead">
+            {{#if registrado}}
+            <div class="alert alert-success alert-dismissable">
+                <strong>{{registrado}}</strong>mensaje de alerta.
+              </div>
+            {{else}} 
+                {{#if existe}}
+            <div class="alert alert-danger alert-dismissable">
+                <strong>{{existe}}</strong>mensaje de alerta.
+              </div>
+
+            {{else}}
+            Registra nuevo administrador
+            {{/if}}
+                {{/if}}
+        </p>
 
         <div class="p-5 shadow-lg container-md">
             <form action="/auth_registarAdmin" method="post">

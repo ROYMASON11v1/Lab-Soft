@@ -9,19 +9,15 @@ const { request } = require('../app');
 router.get('/', function(req, res, next) {
   if(req.session.flag == 1){
     req.session.destroy();
-    res.render('index', { title: 'Libreria', message : 'Email Already Exists' , flag : 1});
+    res.render('index', { title: 'Libreria', message1 : 'Email o cedula ya esta en uso'});
   }
   else if(req.session.flag == 2){
     req.session.destroy();
-    res.render('index', { title: 'Libreria', message : 'Registration Done. Please Login.', flag : 0});
+    res.render('index', { title: 'Libreria', message2 : 'Registracion hecha, por favor inicie sesion'});
   }
   else if(req.session.flag == 3){
     req.session.destroy();
-    res.render('index', { title: 'Libreria', message : 'Confirm Password Does Not Match.', flag : 1});
-  }
-  else if(req.session.flag == 4){
-    req.session.destroy();
-    res.render('index', { title: 'Libreria', message : 'Incorrect Email or Password.', flag : 1 });
+    res.render('index', { title: 'Libreria', message3 : 'Incorrect Email or Password.'});
   }
   else{
     console.log('Entre primera vez')
@@ -126,9 +122,20 @@ router.post('/auth_login', function(req,res,next){
 });
 
 router.get('/Root', function(req, res, next){
-  if (req.session.usuario != null){
-    if(req.session.role == 'root'){
-      res.render('Root', {message : 'Bienvenido ' + req.session.usuario, role:'' + req.session.role });
+  if (req.session.role != null){
+    if(req.session.role == 'root' && req.session.flag == undefined){
+      console.log(req.session.flag, "registrando")
+      res.render('Root', {nada: "Nada que mostrar"})
+    }
+    else if(req.session.flag == 5){
+      console.log(req.session.flag, "registrado con exito")
+      res.render('Root', {registrado :"Nuevo administrador registrado con exito " });
+      req.session.flag = undefined;
+    }
+    else if(req.session.flag == 6){
+      console.log(req.session.flag, "ya registrado")
+      res.render('Root', {existe :"Administrador ya registrado " });
+      req.session.flag = undefined;
     }
   else{
     console.log("no existes")
@@ -152,9 +159,9 @@ router.post('/auth_registarAdmin', function(req, res, next){
       console.log("registrando admin si existe")
       if(err) throw err;
       if(result.length > 0){
-        //req.session.flag = 1;
+        req.session.flag = 6;
         console.log("YA EXISTE")
-        res.redirect('/root');
+        res.redirect('/Root');
       }else{
         console.log("registrando admin si no existe", usuario);
         var hashpassword = bcrypt.hashSync(password, 10);
@@ -163,6 +170,7 @@ router.post('/auth_registarAdmin', function(req, res, next){
         con.query(sql,[usuario,nombre,hashpassword,role], function(err, result, fields){
           
           if(err) throw err;
+          req.session.flag = 5
           res.redirect('/Root');
         });
       }
