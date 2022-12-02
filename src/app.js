@@ -6,6 +6,7 @@ const hbs = require('hbs');
 const indexRouter = require("./routes/index.routes");
 const usersRouter = require("./routes/users.routes");
 const rootRouter = require("./routes/root.routes");
+const AdminRouter = require("./routes/admin.routes");
 //const administradorRouter = require('./routes/administrador');
 const con = require("./conn/conn");
 const session = require("express-session");
