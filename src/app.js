@@ -1,3 +1,5 @@
+
+const ve = require('./conn/config.js');
 const createError = require("http-errors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
@@ -10,6 +12,9 @@ const AdminRouter = require("./routes/admin.routes");
 //const administradorRouter = require('./routes/administrador');
 const con = require("./conn/conn");
 const session = require("express-session");
+
+
+
 
 const app = express();
 
@@ -55,7 +60,7 @@ app.use(function (err, req, res, next) {
 });
 
 //Create Server
-app.listen(3000, () => {
+app.listen(ve.PORT, () => {
   console.log("Listening on port 3000...");
 });
 

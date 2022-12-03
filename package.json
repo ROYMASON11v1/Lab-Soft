@@ -12,6 +12,7 @@
     "datatables.net": "^1.13.1",
     "datatables.net-dt": "^1.13.1",
     "debug": "~2.6.9",
+    "dotenv": "^16.0.3",
     "express": "~4.16.1",
     "express-session": "^1.17.3",
     "hbs": "^4.2.0",
