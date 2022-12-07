@@ -32,12 +32,12 @@ router.get('/', function(req, res, next) {
           for (let i = 0; i < req.session.libro.length; i++) {
           let x = i +1
           let name = "src/views/img/imagen" + req.session.libro[i]["id_libro"] + ".png"
-          fs.writeFile(name, req.session.libro[i]["imagenLibro"], {encoding: 'base64'}, function(err){
-            if (err) console.log(err)
-            else{
-              console.log("creado")
-            }
-          })
+          // fs.writeFile(name, req.session.libro[i]["imagenLibro"], {encoding: 'base64'}, function(err){
+          //   if (err) console.log(err)
+          //   else{
+          //     console.log("creado")
+          //   }
+          // })
         }
         console.log("aquiiii  ", req.session.libro[0]["imagenLibro"])
         res.render('index', { title: 'Libreria', libro: req.session.libro});

@@ -1,4 +1,5 @@
 
+
 const ve = require('./conn/config.js');
 const createError = require("http-errors");
 const express = require("express");
@@ -60,7 +61,7 @@ app.use(function (err, req, res, next) {
 });
 
 //Create Server
-app.listen(ve.PORT, () => {
+app.listen(ve.port, () => {
   console.log("Listening on port 3000...");
 });
 

@@ -1,4 +1,4 @@
-require('dotenv').config();
+const hola = require('dotenv').config();
 
 
 const PORT = process.env.PORT || 3000
@@ -10,10 +10,10 @@ const DB_PORT = process.env.DB_PORT || 3306
 
 
 module.exports = {
-    PORT: PORT,
-    DB_USER: DB_USER,
-    DB_PASSWORD: DB_PASSWORD,
-    DB_HOST: DB_HOST,
-    DB_DATABASE: DB_DATABASE,
-    DB_PORT: DB_PORT
+    port: PORT,
+    db_user: DB_USER,
+    db_password: DB_PASSWORD,
+    db_host: DB_HOST,
+    db_database: DB_DATABASE,
+    db_port: DB_PORT
 }

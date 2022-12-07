@@ -5,11 +5,11 @@ const ve = require('./config.js');
 
 var con = mysql.createConnection({
 
-    host : ve.DB_HOST,
-    user : ve.DB_USER,
-    password : ve.DB_PASSWORD,
-    database : ve.DB_DATABASE,
-    port: ve.DB_PORT
+    host : ve.db_host,
+    user : ve.db_user,
+    password : ve.db_password,
+    database : ve.db_database,
+    port: ve.db
 });
 
 con.connect((err) => {
